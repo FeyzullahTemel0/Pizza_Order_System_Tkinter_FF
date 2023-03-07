@@ -10,8 +10,8 @@ import pymysql.cursors
 from tkinter import messagebox
 #Mysql bağlantı kodlarımız 
 db = pymysql.connect(host='localhost',
-                        user='*******',
-                        password='******', # Bilgisayarında Mysql olanlar için user ve password alanları kendi mysqllerine göre yazılmalıdır.
+                        user='root',
+                        password='feyzullah0348', # Bilgisayarında Mysql olanlar için user ve password alanları kendi mysqllerine göre yazılmalıdır.
                         db='projeglobalaıhub',
                         cursorclass=pymysql.cursors.DictCursor)
 connection = db.cursor()
@@ -231,11 +231,11 @@ def Register():
      Button(root,width=11,text='Kayıt Ol',command=register_user).grid(row=5,column=0)
      Button(root,width=11,text='Giriş Yap',command=login).grid(row=5,column=1)
 
-     def login():
-        root.destroy()
-        Login()
-
      root.mainloop()
+
+def login():
+  root.destroy()
+  Login()
 
 # Login işleminin kontrolünün sağlandığı fonksiyon
 def login_verify():
@@ -263,7 +263,6 @@ def logged_message():
 
 # Login ekranı ---> Kullanıcı giriş ekranı e-mail ve şifrelerin girildiği kısımdır.
 def Login():
-     
      global login_screen
      login_screen = tk.Tk()
      login_screen.title("Pizza Order System Login Panel")
@@ -288,7 +287,7 @@ def Login():
      login_screen.mainloop()
 
 def Odeme_ekranı_classic():
-        margherita_pizza_screen.destroy()
+        classic_pizza_screen.destroy()
         global odeme_screen
         odeme_screen = tk.Tk()
         odeme_screen.geometry("500x300+840+200")
