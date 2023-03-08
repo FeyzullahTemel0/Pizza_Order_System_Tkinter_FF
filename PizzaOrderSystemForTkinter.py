@@ -1,5 +1,4 @@
-
-                              # Parlayan Yıldızlar Grubu Pizza Order System Project Kodluyorlar
+import json
 import webbrowser
 import tkinter as tk
 from tkinter import *
@@ -8,14 +7,16 @@ import time
 import datetime
 import pymysql.cursors
 from tkinter import messagebox
-#Mysql bağlantı kodlarımız 
+
+# Mysql ile çalışabilmek için öncelikle bağlantı kodlarımızı yazdık. 
 db = pymysql.connect(host='localhost',
-                        user='******',
+                        user='*****',
                         password='******', # Bilgisayarında Mysql olanlar için user ve password alanları kendi mysqllerine göre yazılmalıdır.
                         db='projeglobalaıhub',
                         cursorclass=pymysql.cursors.DictCursor)
 connection = db.cursor()
 
+#Kod bloklarımızın her yerinde erişebilmek için global olarak tanımladığımız değişkenlerimiz ve list'lerimiz. 
 global sosListe, pizza_name, pizza_fiyat, boyut, boyutlar, pizzas, radio_sos_control, icecekListe, sosPrice, total_price, boyutlarPrice
 global classic_pizza_acıklama, margherita_pizza_acıklama, turk_pizza_acıklama, dominos_pizza_acıklama, screens_name
 
@@ -24,6 +25,7 @@ margherita_pizza_acıklama = "İçindekiler:\nSucuk\nBiber\nDomates\nFesleğen"
 turk_pizza_acıklama       = "İçindekiler:\nSucuk\nMozarella Peyniri\nKüp Sucuk\nSalam"
 dominos_pizza_acıklama    = "İçindekiler:\nSalam\nJambon\nSucuk\nKüp Patates"
 
+# List tanımlamaları
 pizzas      = ['Klasik Pizza','Margherita Pizza','Türk Pizza','Dominos Pizza']
 sosListe    = []
 boyutlar    = []
@@ -32,8 +34,10 @@ sosPrice    = []
 icecekPrice = []
 boyutlarPrice=[]
 screens_name =[]
-class Pizza():
 
+# Üst sınıfın oluşturulması
+class Pizza():
+  # init fonksiyonu ile 3 parametre alarak kullanacağımız fonksiyonların tanımlanması kısımları.
   def __init__(self, description, cost):
     self.__description = description,
     self.__cost = cost
@@ -50,7 +54,7 @@ class Pizza():
   def set_cost(self,cost_):
     self.__cost = cost_
 
-
+#Pizzalarımızın Pizza üst sınıfından kalıtım alması.
 class Classic(Pizza):
   def __init__(self,description, cost):
     super().__init__(description, cost)
@@ -75,6 +79,7 @@ pizTurk = TurkPizza("Türk Pizza", 120)
 pizDo = Dominos("Dominos Pizza", 150)
 print("\n")
 
+# Decorator sınıfı ve Pizza classımızdan kalıtım alması.
 class Decorator(Pizza):
 
   def __init__(self, description, cost):
@@ -93,7 +98,10 @@ class Decorator(Pizza):
   def set_cost(self,cost_):
     self._cost = cost_
   
+  # get_cost() fonksiyonumuzu hesaplamalardaki anlık değişiklikler için tanımladık.
+  # get_description() fonksiyonumuzu pizzalar ve soslar hakkındaki bilgilere erişebilmek için tanımladık.
 
+  # Sosların Decorator sınıfından kalıtım alması.
 class Zeytin(Decorator):
   def __init__(self,description, cost):
     super().__init__(description, cost) 
@@ -118,12 +126,16 @@ class Misir(Decorator):
   def __init__(self,description, cost):
     super().__init__(description, cost)
 
+    # Sosların sabit değerlerinin tanımlanması.
 sosZeytin = Zeytin("Siyah Zeytin",5)
 sosMantar = Mantar("Kültür Mantarı",12)
 sosKeciPeyniri = KeciPeyniri("Keçi Peyniri 50gr",25)
 sosEt = Et("Dana Eti 100gr",32)
 sosSogan = Sogan("Soğan",7)
 sosMisir= Misir("Süt Mısır 35gr",9)
+
+
+# Projeye kendi eklediğimiz boyutlar ve içeceklerin değişkenlere atanması.
 
 kckBoy = "Küçük Boy"
 kckBoy_Price = 10
@@ -170,7 +182,7 @@ def Succes_Message():
 def Error_Message():
      print('Bir hata oluştu tekrar deneyin!!!')
 
-# # Kullanıcının kayıt olmas kısmındaki sorguların olduğu kısım
+# 
 def register_user():
 
      # Globalde tanımladığımız değişkenlerimizin getirilmesi ve keywordlerde kafa karışıklığı yaratmaması için yeni değişkenlere atanması.
@@ -180,7 +192,6 @@ def register_user():
      password_info = password.get()
 
      # Kullanıcıdan alınan bilgilerin herhangi bir tanesinin boş olması durumunda hata mesajının yazdırılması
-
      if name_surname_info == " ":
           Error_Message()
      elif email_info == " ":
@@ -199,8 +210,9 @@ def register_user():
           Login()
 
 
+# Kayıtlı olmayan kullanıcılar için kayıt olma ekranımızın kod blokları.
 def Register():
-     login_screen.destroy() # Eğer Login ekranından gelmiş ise bu  kod çalışır çünkü ilk login ekranımız çalışmaktadır.
+     login_screen.destroy()
      global root
      root = Tk()
      root.title("Pizza Order System Register Panel")
@@ -232,7 +244,6 @@ def Register():
      Button(root,width=11,text='Giriş Yap',command=login).grid(row=5,column=1)
 
      root.mainloop()
-
 def login():
   root.destroy()
   Login()
@@ -261,7 +272,7 @@ def not_logged_message():
 def logged_message():
      tk.messagebox.showinfo("Doğru","Giriş İşlemi Başarılı")
 
-# Login ekranı ---> Kullanıcı giriş ekranı e-mail ve şifrelerin girildiği kısımdır.
+# Login ekranı ---> Kullanıcının e-mail ve şifresi ile uygulamaya giriş yaptığı ekran ve kodları.
 def Login():
      global login_screen
      login_screen = tk.Tk()
@@ -286,6 +297,7 @@ def Login():
 
      login_screen.mainloop()
 
+    # classic pizza siparişi veren birisi için ödeme yapmasını sağlamak amacıyla yazılan ödeme ekranı.
 def Odeme_ekranı_classic():
         classic_pizza_screen.destroy()
         global odeme_screen
@@ -333,7 +345,17 @@ def Odeme_ekranı_classic():
           sos_name   = convertList(sosListe)
           boyut      = convertList(boyutlar)
           TotalHesaplamaClassic()
-          order_description ="Pizza: " + pizza_name + " Boyut: " + boyut +  " İçecek: " + icecek_name + " Soslar: " + sos_name + " Fiyat: " + total
+          Email_verify = email_verify.get() 
+          Password_verify = password_verify.get()
+          sql1 = "SELECT name_surname FROM dbregister where email = %s and sifre = %s" 
+          connection.execute(sql1,[(Email_verify),(Password_verify)])
+          user = connection.fetchall()
+          for i in user:
+            kullanıcı = i
+            i = kullanıcı['name_surname']
+            yazı2 = "Paneldeki Aktif Kullanıcı: ",i
+            yazı2 = convertTupleName(yazı2)
+          order_description =yazı2 + "Pizza: " + pizza_name + " Boyut: " + boyut +  " İçecek: " + icecek_name + " Soslar: " + sos_name + " Fiyat: " + total
           userid_info = userid.get()
           credit_card_name_surname_info = credit_card_name_surname.get()
           credit_card_number_info = credit_card_number.get()
@@ -351,6 +373,7 @@ def Odeme_ekranı_classic():
         odeme_screen.mainloop()
 
 #---------------------------------------------------*---------------------------------------------------------------*-----------------------------------------------------------------------*--------------------------
+    # Margherita pizza siparişi veren birisi için ödeme yapmasını sağlamak amacıyla yazılan ödeme ekranı.
 def Odeme_Ekranı_margherita():
         margherita_pizza_screen.destroy()
         global odeme_screen
@@ -398,7 +421,17 @@ def Odeme_Ekranı_margherita():
           sos_name   = convertList(sosListe)
           boyut      = convertList(boyutlar)
           TotalHesaplamaMargherita()
-          order_description ="Pizza: " + pizza_name + " Boyut: " + boyut +  " İçecek: " + icecek_name + " Soslar: " + sos_name + " Fiyat: " + total
+          Email_verify = email_verify.get() 
+          Password_verify = password_verify.get()
+          sql1 = "SELECT name_surname FROM dbregister where email = %s and sifre = %s" 
+          connection.execute(sql1,[(Email_verify),(Password_verify)])
+          user = connection.fetchall()
+          for i in user:
+            kullanıcı = i
+            i = kullanıcı['name_surname']
+            yazı2 = "Paneldeki Aktif Kullanıcı: ",i
+            yazı2 = convertTupleName(yazı2)
+          order_description =yazı2 + "Pizza: " + pizza_name + " Boyut: " + boyut +  " İçecek: " + icecek_name + " Soslar: " + sos_name + " Fiyat: " + total
           userid_info = userid.get()
           credit_card_name_surname_info = credit_card_name_surname.get()
           credit_card_number_info = credit_card_number.get()
@@ -417,7 +450,7 @@ def Odeme_Ekranı_margherita():
 
           
 #*--------------------------------------------------------------*--------------------------------------------------------------------------*------------------------------------------------
-
+    # Türk pizza siparişi veren birisi için ödeme yapmasını sağlamak amacıyla yazılan ödeme ekranı.
 def Odeme_Ekranı_Turk():
         turk_pizza_screen.destroy()
         global odeme_screen
@@ -465,7 +498,17 @@ def Odeme_Ekranı_Turk():
           sos_name   = convertList(sosListe)
           boyut      = convertList(boyutlar)
           TotalHesaplamaTurk()
-          order_description ="Pizza: " + pizza_name + " Boyut: " + boyut +  " İçecek: " + icecek_name + " Soslar: " + sos_name + " Fiyat: " + total
+          Email_verify = email_verify.get() 
+          Password_verify = password_verify.get()
+          sql1 = "SELECT name_surname FROM dbregister where email = %s and sifre = %s" 
+          connection.execute(sql1,[(Email_verify),(Password_verify)])
+          user = connection.fetchall()
+          for i in user:
+            kullanıcı = i
+            i = kullanıcı['name_surname']
+            yazı2 = "Paneldeki Aktif Kullanıcı: ",i
+            yazı2 = convertTupleName(yazı2)
+          order_description =yazı2 + "Pizza: " + pizza_name + " Boyut: " + boyut +  " İçecek: " + icecek_name + " Soslar: " + sos_name + " Fiyat: " + total
           userid_info = userid.get()
           credit_card_name_surname_info = credit_card_name_surname.get()
           credit_card_number_info = credit_card_number.get()
@@ -483,6 +526,7 @@ def Odeme_Ekranı_Turk():
         odeme_screen.mainloop()
 
 #*--------------------------------------------------------------*--------------------------------------------------------------------------*------------------------------------------------
+    # Dominos pizza siparişi veren birisi için ödeme yapmasını sağlamak amacıyla yazılan ödeme ekranı.
 def Odeme_Ekranı_Dominos():
         dominos_pizza_screen.destroy()
         global odeme_screen
@@ -523,7 +567,7 @@ def Odeme_Ekranı_Dominos():
 
         
         Button(odeme_screen,text="<",command=goback,bg="red", fg="black", font="verdana 11 bold").place(x=5,y=5,width=30,height=30)
-
+        # Hesaplamaların ve bilgilerin veritabanına gönderilip kayıt edildiği fonksiyonumuz. Tüm ödeme ekranlarındaki mantık aynıdır.
         def information_verify_dominos():
           pizza_name = convertTupleName(pizDo.get_description())
           order_time = datetime.datetime.now()
@@ -531,7 +575,17 @@ def Odeme_Ekranı_Dominos():
           sos_name   = convertList(sosListe)
           boyut      = convertList(boyutlar)
           TotalHesaplamaDominos()
-          order_description ="Pizza: " + pizza_name + " Boyut: " + boyut +  " İçecek: " + icecek_name + " Soslar: " + sos_name + " Fiyat: " + total
+          Email_verify = email_verify.get() 
+          Password_verify = password_verify.get()
+          sql1 = "SELECT name_surname FROM dbregister where email = %s and sifre = %s" 
+          connection.execute(sql1,[(Email_verify),(Password_verify)])
+          user = connection.fetchall()
+          for i in user:
+            kullanıcı = i
+            i = kullanıcı['name_surname']
+            yazı2 = "Paneldeki Aktif Kullanıcı: ",i
+            yazı2 = convertTupleName(yazı2)
+          order_description =yazı2 + "Pizza: " + pizza_name + " Boyut: " + boyut +  " İçecek: " + icecek_name + " Soslar: " + sos_name + " Fiyat: " + total
           userid_info = userid.get()
           credit_card_name_surname_info = credit_card_name_surname.get()
           credit_card_number_info = credit_card_number.get()
@@ -548,6 +602,7 @@ def Odeme_Ekranı_Dominos():
         Button(odeme_screen,text="Ödeme",command=information_verify_dominos, width=20,font="bold").grid(row=9,column=1)
         odeme_screen.mainloop()
         
+ # Her pizza tabanı için tanımlanan hesaplama fonksiyonları.
 def TotalHesaplamaDominos():
         boyut_Price   = sum(boyutlarPrice)
         totalİcecek   = sum(icecekPrice)
@@ -583,14 +638,25 @@ def TotalHesaplamaClassic():
 def goback():
     odeme_screen.destroy()
 
-
+    # Kullanıcının giriş yaptıktan sonraki karşılaşacağı ekranımızdır. Bu ekranda pizza tabanlarımız bulunmaktadır.
 def Home_Page():
     global home_screen
     home_screen = Tk()
     home_screen.geometry("1900x1900")
     home_screen.title('Menu Screen')
     home_screen.configure(background="light grey")
-
+    Email_verify = email_verify.get() 
+    Password_verify = password_verify.get()
+    sql = "SELECT name_surname FROM dbregister where email = %s and sifre = %s" 
+    connection.execute(sql,[(Email_verify),(Password_verify)])
+    user = connection.fetchall()
+    for i in user:
+       kullanıcı = i
+       i = kullanıcı['name_surname']
+       yazı2 = "Paneldeki Aktif Kullanıcı: ",i
+       yazı2 = convertTupleName(yazı2)
+    
+    Label(home_screen,text=yazı2 ,fg="black", font="verdana 11 bold").place(x=1450,y=10)
     Label(home_screen,text="Pizza Sipariş Uygulamasına Hoşgeldiniz....",fg="black", font="verdana 14 bold").place(x=750,y=10)
 
     # Klasik Pizza Kısmı---
@@ -645,26 +711,54 @@ def Home_Page():
 def gohome():
   convertList(pizzas)
   if "Klasik Pizza" in pizzas:
-     classic_pizza_screen.destroy()
-     Home_Page()
+      classic_pizza_screen.destroy()
+      sosListe.clear()
+      boyutlar.clear()
+      icecekListe.clear()
+      sosPrice.clear()
+      icecekPrice.clear()
+      boyutlarPrice.clear()
+      screens_name.clear()
+      Home_Page()
 
 def gohome1():
   convertList(pizzas)
   if "Margherita Pizza" in pizzas:
-     margherita_pizza_screen.destroy()
-     Home_Page()
+      margherita_pizza_screen.destroy()
+      sosListe.clear()
+      boyutlar.clear()
+      icecekListe.clear()
+      sosPrice.clear()
+      icecekPrice.clear()
+      boyutlarPrice.clear()
+      screens_name.clear()
+      Home_Page()
 
 def gohome2():
   convertList(pizzas)
   if "Türk Pizza" in pizzas:
-     turk_pizza_screen.destroy()
-     Home_Page()
+      turk_pizza_screen.destroy()
+      sosListe.clear()
+      boyutlar.clear()
+      icecekListe.clear()
+      sosPrice.clear()
+      icecekPrice.clear()
+      boyutlarPrice.clear()
+      screens_name.clear()
+      Home_Page()
 
 def gohome3():
   convertList(pizzas)
   if "Dominos Pizza" in pizzas:
-     dominos_pizza_screen.destroy()
-     Home_Page()
+      dominos_pizza_screen.destroy()
+      sosListe.clear()
+      boyutlar.clear()
+      icecekListe.clear()
+      sosPrice.clear()
+      icecekPrice.clear()
+      boyutlarPrice.clear()
+      screens_name.clear()
+      Home_Page()
 
 
 # Klasik Pizza
@@ -1558,9 +1652,6 @@ def turk_pizza():
       turk_pizza_screen.mainloop()
 
 #*--------------------------------------------------------------*--------------------------------------------------------------------------*------------------------------------------------
-#*--------------------------------------------------------------*--------------------------------------------------------------------------*------------------------------------------------
-#*--------------------------------------------------------------*--------------------------------------------------------------------------*------------------------------------------------
-
 
 # Dominos Pizza TK
 def dominos_pizza():
