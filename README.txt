@@ -35,3 +35,7 @@ CREATE TABLE `ordersystemtk` (
 şeklinde kodlarınızı yeni querylere yazıp çalıştırınız.
 
 Gerekli bağlantıları yaptıktan sonra proje sorunsuz çalışacaktır.
+
+Not: Projeye kullanıcı kaydı ve giriş ekranının eklenme sebebi siparişlerin alındıktan sonraki süreçte bir problem yaşanması durumunda siparişi alan ve gönderen kullanıcının kim olduğunu görüp işletmenin kimin sorumluluğunda olmasından haberdar olamsı amaçlanmıştır. Böylece suçsuz insalların canları boş yere yanmayacaktır.
+
+
