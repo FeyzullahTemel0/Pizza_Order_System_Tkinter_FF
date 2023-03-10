@@ -1,0 +1,8 @@
+* Soslar:
+1: Zeytin
+2: Mantarlar
+3: Keçi Peyniri
+4: Et
+5: Soğan
+6: Mısır
+

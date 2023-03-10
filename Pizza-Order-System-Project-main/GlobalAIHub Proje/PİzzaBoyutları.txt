@@ -1,0 +1,4 @@
+* Pizza boyutunuzu seçiniz:
+1: Küçük Boy
+2: Orta Boy
+3: Büyük Boy

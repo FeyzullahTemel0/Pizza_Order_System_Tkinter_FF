@@ -1,0 +1,8 @@
+    * İçecekler:
+1: Ayran
+2: Coca-Cola
+3: Gazoz
+4: Fanta
+5: Ice-Tea (Şeftali)
+6: Ice-Tea (Limon)
+
